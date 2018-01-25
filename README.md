@@ -5,6 +5,7 @@ C'est un morpion, pas besoin de rappeler les règles.
 
 ## How to play
 Chaque case a un numéro, de 1 à 9 suivant le plan suivant :
+
         1 | 2 | 3
         ———
         4 | 5 | 6
