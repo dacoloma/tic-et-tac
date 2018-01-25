@@ -27,8 +27,6 @@ class Board
         @case7 = BoardCase.new(7)
         @case8 = BoardCase.new(8)
         @case9 = BoardCase.new(9)
-        @case1.etat = 'X'
-        @case5.etat = 'X'
 
         @tab = [@case1.etat,@case2.etat,@case3.etat,@case4.etat,@case5.etat,@case6.etat,@case7.etat,@case8.etat,@case9.etat]
     end
@@ -50,17 +48,25 @@ class Board
 
     def plays
         @error = false
-        @move = gets.chomp.to_i
-        if @tab[@move - 1] == " " #.etat == " "
-            if @@i == true
-                @tab[@move - 1] = 'X'#.etat = 'X'
-                @@i = !@@i
 
+        @move = gets.chomp
+        if "123456789".include? @move
+
+            @move = @move.to_i
+            if @tab[@move - 1] == " " #.etat == " "
+                if @@i == true
+                    @tab[@move - 1] = 'X'#.etat = 'X'
+                    @@i = !@@i
+
+                else
+                    @tab[@move - 1] = 'O' #.etat = 'O'
+                    @@i = !@@i
+                end
+                @error = false
             else
-                @tab[@move - 1] = 'O' #.etat = 'O'
-                @@i = !@@i
+                @error = true
             end
-            @error = false
+
 
         else
             @error = true
@@ -72,38 +78,21 @@ class Board
     def victory
         @win = false
 
-        case @tab[0]
-        when @tab[1]
-            if @tab[0] == @tab[2]
-                @win =  true
-                binding.pry
-            end
-        when @tab[4]
-            if @tab[0] == @tab[8]
-                @win =  true
-            end
-        when @tab[3]
-            if @tab[0] == @tab[6]
-                @win =  true
-            end
-        end
+        #Verticales
+        @win =  true if @tab[0] == @tab[3] && @tab[3] == @tab[6] && @tab[0] != " "
+        @win =  true if @tab[1] == @tab[4] && @tab[4] == @tab[7] && @tab[1] != " "
+        @win =  true if @tab[2] == @tab[5] && @tab[5] == @tab[8] && @tab[2] != " "
 
-        case @tab[2]
-        when @tab[4]
-            if @tab[2] == @tab[6]
-                @win =  true
-            end
-        when @tab[5]
-            if @tab[2] == @tab[8]
-                @win =  true
-            end
-        end
+        #Horizontales
+        @win =  true if @tab[0] == @tab[1] && @tab[1] == @tab[2] && @tab[0] != " "
+        @win =  true if @tab[3] == @tab[4] && @tab[4] == @tab[5] && @tab[3] != " "
+        @win =  true if @tab[6] == @tab[7] && @tab[7] == @tab[8] && @tab[6] != " "
 
-        @win =  true if @tab[3] == @tab[4] && @tab[3] == @tab[5]
+        #Diagonales
+        @win =  true if @tab[0] == @tab[4] && @tab[4] == @tab[8] && @tab[0] != " "
+        @win =  true if @tab[2] == @tab[4] && @tab[4] == @tab[6] && @tab[2] != " "
 
-        @win =  true if @tab[1] == @tab[4] && @tab[1] == @tab[7]
-
-        @win =  true if @tab[6] == @tab[7] && @tab[6] == @tab[8]
+        #binding.pry
     end
 end
 
@@ -148,7 +137,7 @@ class Game
 
         @board.state
         #binding.pry
-        while (@board.tab.include? " ")   #break
+        while (@board.tab.include? " ") #&& (@board.win == false) #break
             @@turn = !@@turn
             if @@turn == true
                 player = @player1
@@ -161,7 +150,7 @@ class Game
             while @board.error
                 @board.state
                 #binding.pry
-                puts "\t\t\t  ERROR, choose an another case"
+                puts "\t\t\t  ERROR, try again"
                 print "\t\t\t  #{player.name}, your move (1-9): "
                 @board.plays
             end
@@ -169,10 +158,13 @@ class Game
             @board.victory
             #binding.pry
             break if @board.win == true
-
+            #binding.pry
         end
-
-        puts "\t\t\t\t\t\t  TIE GAME"
+        if @board.win == true
+            puts "\t\tWE HAVE A WINNER ! CONGRATULATIONS #{player.name} ! Le loser te doit une pinte !"
+        else
+            puts "\t\t\t\t\t\t  TIE GAME"
+        end
     end
 
 end
