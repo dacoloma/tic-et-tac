@@ -13,7 +13,7 @@ end
 class Board
     #accueille les 9 cases
     attr_accessor :tab
-    attr_reader :error
+    attr_reader :error, :win
     @@i = true
 
     def initialize
@@ -27,6 +27,9 @@ class Board
         @case7 = BoardCase.new(7)
         @case8 = BoardCase.new(8)
         @case9 = BoardCase.new(9)
+        @case1.etat = 'X'
+        @case5.etat = 'X'
+
         @tab = [@case1.etat,@case2.etat,@case3.etat,@case4.etat,@case5.etat,@case6.etat,@case7.etat,@case8.etat,@case9.etat]
     end
 
@@ -67,51 +70,47 @@ class Board
     end
 
     def victory
+        @win = false
+
         case @tab[0]
         when @tab[1]
             if @tab[0] == @tab[2]
-                puts "WINS !"
+                @win =  true
+                binding.pry
             end
         when @tab[4]
             if @tab[0] == @tab[8]
-                puts "WINS !"
+                @win =  true
             end
         when @tab[3]
             if @tab[0] == @tab[6]
-                puts "WINS !"
+                @win =  true
             end
         end
 
         case @tab[2]
         when @tab[4]
             if @tab[2] == @tab[6]
-                puts "WINS !"
+                @win =  true
             end
         when @tab[5]
             if @tab[2] == @tab[8]
-                puts "WINS !"
+                @win =  true
             end
         end
 
-        puts "WINS !" if @tab[3] == @tab[4] && @tab[3] == @tab[5]
+        @win =  true if @tab[3] == @tab[4] && @tab[3] == @tab[5]
 
-        puts "WINS !" if @tab[1] == @tab[4] && @tab[1] == @tab[7]
+        @win =  true if @tab[1] == @tab[4] && @tab[1] == @tab[7]
 
-        puts "WINS !" if @tab[6] == @tab[7] && @tab[6] == @tab[8]
-
+        @win =  true if @tab[6] == @tab[7] && @tab[6] == @tab[8]
     end
 end
-
-
 
 class Player
     #nom
     attr_accessor :name
-
-
     #état victoire ou défaite
-
-
 end
 
 class Game
@@ -148,7 +147,8 @@ class Game
     def play
 
         @board.state
-        while @board.tab.include? " "
+        #binding.pry
+        while (@board.tab.include? " ")   #break
             @@turn = !@@turn
             if @@turn == true
                 player = @player1
@@ -166,9 +166,12 @@ class Game
                 @board.plays
             end
             @board.state
+            @board.victory
+            #binding.pry
+            break if @board.win == true
 
         end
-        @board.victory
+
         puts "\t\t\t\t\t\t  TIE GAME"
     end
 
