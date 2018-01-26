@@ -174,7 +174,7 @@ class Game
             #On teste si il y a une victoire
             @board.victory
             break if @board.win == true
-            
+
         end
         if @board.win == true
             puts "\t\tWE HAVE A WINNER ! CONGRATULATIONS #{player.name} ! Le loser te doit une pinte !"
@@ -185,6 +185,4 @@ class Game
 
 end
 
-tic_tac = Game.new
-
-tic_tac.play
+Game.new.play
